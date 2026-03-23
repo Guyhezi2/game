@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="he"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Soap Bubble Rise&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(to bottom, #e0f7fa, #80deea);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>touch-action: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>canvas {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#ui {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #006064;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 24px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>pointer-events: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-shadow: 1px 1px 2px rgba(255,255,255,0.8);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#overlay {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 0; left: 0; width: 100%; height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255, 255, 255, 0.3);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter: blur(5px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 10;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>button {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 15px 40px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #00acc1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 15px rgba(0,0,0,0.2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: transform 0.2s;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>button:active { transform: scale(0.95); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>h1 { color: #006064; margin-bottom: 20px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="ui"&gt;Score: 0&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="overlay"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1 id="title"&gt;Soap Bubble Rise&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="startBtn"&gt;START FLOATING&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;canvas id="gameCanvas"&gt;&lt;/canvas&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const canvas = document.getElementById('gameCanvas');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const ctx = canvas.getContext('2d');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const ui = document.getElementById('ui');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const overlay = document.getElementById('overlay');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const startBtn = document.getElementById('startBtn');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const title = document.getElementById('title');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Game Constants</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const GRAVITY = 0.25;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const FLAP_FORCE = -5;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const SPAWN_RATE = 90; // Frames between obstacles</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let bubble, obstacles, score, gameActive, frameCount;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function init() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>canvas.width = window.innerWidth;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>canvas.height = window.innerHeight;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>bubble = {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>x: 80,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>y: canvas.height / 2,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>radius: 25,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>velocity: 0,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>color: 'hsla(200, 100%, 80%, 0.6)'</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>obstacles = [];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>score = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameActive = false;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>frameCount = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function drawBubble() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.save();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Bubble body with gradient</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let gradient = ctx.createRadialGradient(bubble.x - 8, bubble.y - 8, 2, bubble.x, bubble.y, bubble.radius);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gradient.addColorStop(0.5, 'rgba(173, 216, 230, 0.4)');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gradient.addColorStop(1, 'rgba(255, 182, 193, 0.6)');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fillStyle = gradient;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fill();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Outer glow</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.lineWidth = 2;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.stroke();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Highlight shine</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.arc(bubble.x - 10, bubble.y - 10, 5, 0, Math.PI * 2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fill();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.restore();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function createObstacle() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const gap = 200;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const minHeight = 50;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const maxHeight = canvas.height - gap - minHeight;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const height = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>obstacles.push({</p>
+<p class="p1"><span class="Apple-converted-space">                </span>x: canvas.width,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>top: height,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>bottom: canvas.height - height - gap,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>width: 60,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>passed: false</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function drawObstacles() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>obstacles.forEach(obs =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.fillStyle = '#455a64';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Top obstacle (Thorn/Pillar)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.fillRect(obs.x, 0, obs.width, obs.top);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Bottom obstacle</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.fillRect(obs.x, canvas.height - obs.bottom, obs.width, obs.bottom);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function update() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!gameActive) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>bubble.velocity += GRAVITY;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>bubble.y += bubble.velocity;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Check floor/ceiling</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (bubble.y + bubble.radius &gt; canvas.height || bubble.y - bubble.radius &lt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>gameOver();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Move obstacles</p>
+<p class="p1"><span class="Apple-converted-space">            </span>obstacles.forEach(obs =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>obs.x -= 3.5;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Collision detection</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>bubble.x + bubble.radius &gt; obs.x &amp;&amp;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>bubble.x - bubble.radius &lt; obs.x + obs.width &amp;&amp;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>(bubble.y - bubble.radius &lt; obs.top || bubble.y + bubble.radius &gt; canvas.height - obs.bottom)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>gameOver();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Score update</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (!obs.passed &amp;&amp; obs.x + obs.width &lt; bubble.x) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>obs.passed = true;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>score++;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ui.innerText = `Score: ${score}`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Cleanup obstacles</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (obstacles.length &gt; 0 &amp;&amp; obstacles[0].x &lt; -60) obstacles.shift();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Spawn obstacles</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (frameCount % SPAWN_RATE === 0) createObstacle();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>frameCount++;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function render() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.clearRect(0, 0, canvas.width, canvas.height);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>drawObstacles();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>drawBubble();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>update();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>requestAnimationFrame(render);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function flap() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (gameActive) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>bubble.velocity = FLAP_FORCE;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function gameOver() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameActive = false;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overlay.style.display = 'flex';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>title.innerText = `POP! Final Score: ${score}`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>startBtn.innerText = 'TRY AGAIN';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function startGame() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>init();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameActive = true;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overlay.style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Controls</p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.addEventListener('keydown', (e) =&gt; { if (e.code === 'Space') flap(); });</p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.addEventListener('touchstart', (e) =&gt; {<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (gameActive) flap();<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (overlay.style.display !== 'none' &amp;&amp; e.target === startBtn) startGame();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>startBtn.addEventListener('click', startGame);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>init();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>render();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.addEventListener('resize', init);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
