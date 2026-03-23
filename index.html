@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Soap Bubble Rise</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #e0f7fa, #80deea);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            touch-action: none;
+        }
+        canvas {
+            display: block;
+        }
+        #ui {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+            color: #006064;
+            font-size: 24px;
+            font-weight: bold;
+            pointer-events: none;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+        #overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+        button {
+            padding: 15px 40px;
+            font-size: 20px;
+            background: #00acc1;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        button:active { transform: scale(0.95); }
+        h1 { color: #006064; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div id="ui">Score: 0</div>
+    <div id="overlay">
+        <h1 id="title">Soap Bubble Rise</h1>
+        <button id="startBtn">START FLOATING</button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const ui = document.getElementById('ui');
+        const overlay = document.getElementById('overlay');
+        const startBtn = document.getElementById('startBtn');
+        const title = document.getElementById('title');
+
+        // Game Constants
+        const GRAVITY = 0.25;
+        const FLAP_FORCE = -5;
+        const SPAWN_RATE = 90; // Frames between obstacles
+
+        let bubble, obstacles, score, gameActive, frameCount;
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            bubble = {
+                x: 80,
+                y: canvas.height / 2,
+                radius: 25,
+                velocity: 0,
+                color: 'hsla(200, 100%, 80%, 0.6)'
+            };
+            
+            obstacles = [];
+            score = 0;
+            gameActive = false;
+            frameCount = 0;
+        }
+
+        function drawBubble() {
+            ctx.save();
+            // Bubble body with gradient
+            let gradient = ctx.createRadialGradient(bubble.x - 8, bubble.y - 8, 2, bubble.x, bubble.y, bubble.radius);
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+            gradient.addColorStop(0.5, 'rgba(173, 216, 230, 0.4)');
+            gradient.addColorStop(1, 'rgba(255, 182, 193, 0.6)');
+
+            ctx.beginPath();
+            ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            // Outer glow
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Highlight shine
+            ctx.beginPath();
+            ctx.arc(bubble.x - 10, bubble.y - 10, 5, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function createObstacle() {
+            const gap = 200;
+            const minHeight = 50;
+            const maxHeight = canvas.height - gap - minHeight;
+            const height = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
+            
+            obstacles.push({
+                x: canvas.width,
+                top: height,
+                bottom: canvas.height - height - gap,
+                width: 60,
+                passed: false
+            });
+        }
+
+        function drawObstacles() {
+            obstacles.forEach(obs => {
+                ctx.fillStyle = '#455a64';
+                // Top obstacle (Thorn/Pillar)
+                ctx.fillRect(obs.x, 0, obs.width, obs.top);
+                // Bottom obstacle
+                ctx.fillRect(obs.x, canvas.height - obs.bottom, obs.width, obs.bottom);
+            });
+        }
+
+        function update() {
+            if (!gameActive) return;
+
+            bubble.velocity += GRAVITY;
+            bubble.y += bubble.velocity;
+
+            // Check floor/ceiling
+            if (bubble.y + bubble.radius > canvas.height || bubble.y - bubble.radius < 0) {
+                gameOver();
+            }
+
+            // Move obstacles
+            obstacles.forEach(obs => {
+                obs.x -= 3.5;
+
+                // Collision detection
+                if (
+                    bubble.x + bubble.radius > obs.x && 
+                    bubble.x - bubble.radius < obs.x + obs.width &&
+                    (bubble.y - bubble.radius < obs.top || bubble.y + bubble.radius > canvas.height - obs.bottom)
+                ) {
+                    gameOver();
+                }
+
+                // Score update
+                if (!obs.passed && obs.x + obs.width < bubble.x) {
+                    obs.passed = true;
+                    score++;
+                    ui.innerText = `Score: ${score}`;
+                }
+            });
+
+            // Cleanup obstacles
+            if (obstacles.length > 0 && obstacles[0].x < -60) obstacles.shift();
+
+            // Spawn obstacles
+            if (frameCount % SPAWN_RATE === 0) createObstacle();
+            
+            frameCount++;
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawObstacles();
+            drawBubble();
+            update();
+            requestAnimationFrame(render);
+        }
+
+        function flap() {
+            if (gameActive) {
+                bubble.velocity = FLAP_FORCE;
+            }
+        }
+
+        function gameOver() {
+            gameActive = false;
+            overlay.style.display = 'flex';
+            title.innerText = `POP! Final Score: ${score}`;
+            startBtn.innerText = 'TRY AGAIN';
+        }
+
+        function startGame() {
+            init();
+            gameActive = true;
+            overlay.style.display = 'none';
+        }
+
+        // Controls
+        window.addEventListener('keydown', (e) => { if (e.code === 'Space') flap(); });
+        window.addEventListener('touchstart', (e) => { 
+            if (gameActive) flap(); 
+            if (overlay.style.display !== 'none' && e.target === startBtn) startGame();
+        });
+        startBtn.addEventListener('click', startGame);
+
+        init();
+        render();
+
+        window.addEventListener('resize', init);
+    </script>
+</body>
+</html>
